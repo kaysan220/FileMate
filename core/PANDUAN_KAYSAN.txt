@@ -1,0 +1,23 @@
+=====================================================================
+PANDUAN TUGAS KAYSAN NAWFAL (BACKEND & SCORING LOGIC DEVELOPER)
+=====================================================================
+
+1. FILE YANG WAJIB KAMU KUASAI:
+   - `core/algorithms.py` (Berisi logika IPO, scoring, klasifikasi risiko, sensor nama, & CSV log)
+   - `app.py` (Server Python Flask penghubung Frontend & Backend)
+
+2. PENJELASAN FUNGSI DI `core/algorithms.py` UNTUK SIDANG ALPRO:
+   - `nilai(jumlah_malware_dibuka, jumlah_salah_hapus, jumlah_hint)`:
+     Menghitung skor dari modal 100 poin. Buka malware (-15), salah hapus file aman (-5), pakai Hint (-5).
+     Menggunakan `max(0, skor)` sebagai penanganan edge-case agar skor tidak pernah minus.
+     Percabangan kategori risiko: `<= 50` (TINGGI), `51-80` (SEDANG), `> 80` (RENDAH).
+   - `sensor_nama(nama_input)`:
+     Menyensor nama menjadi huruf awal dan akhir saja (misal `Rohit` -> `R****T`) demi privasi data, serta membersihkan karakter berbahaya (`< > " ' & = + - @`) agar aman dari XSS dan CSV Injection.
+   - `tulis_log()` & `tulis_feedback()`:
+     Menulis hasil simulasi ke `data/hasil.csv` dan masukan responden ke `data/feedback_user.csv`.
+
+3. CARA MENJALANKAN SERVER PYTHON:
+   Buka terminal di folder utama, lalu jalankan:
+       pip install flask
+       python app.py
+   Lalu buka browser di: http://127.0.0.1:5000

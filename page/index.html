@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="id" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FileMate — Safe Download Advisor</title>
+    <link rel="stylesheet" href="../tampilan/css/style.css">
+</head>
+<body>
+
+    <nav class="navbar">
+        <a href="index.html" class="filemate-logo">
+            <svg width="42" height="42" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                <path class="logo-ShieldPath" d="M50 8 L86 22 V48 C86 71 70 86 50 94 C30 86 14 71 14 48 V22 L50 8 Z" stroke-width="6" stroke-linejoin="round"/>
+                <path class="logo-FolderTab" d="M28 33 C28 30.5 30 28.5 32.5 28.5 H46 C48 28.5 49.5 30 50.5 32 L52 35 H28 V33 Z"/>
+                <rect class="logo-FolderBody" x="28" y="34" width="44" height="34" rx="8"/>
+                <circle class="logo-Eye" cx="41" cy="49" r="4"/>
+                <circle class="logo-Eye" cx="59" cy="49" r="4"/>
+                <path class="logo-Mouth" d="M43 57 Q50 63 57 57" stroke-width="3.5" stroke-linecap="round"/>
+            </svg>
+            <div class="logo-text-wrap">
+                <div class="logo-title"><span class="part-file">File</span><span class="part-mate">Mate</span></div>
+                <div class="logo-subtitle">SAFE DOWNLOAD ADVISOR</div>
+            </div>
+        </a>
+        <div class="nav-actions">
+            <a href="play.html" class="btn btn-primary btn-sm">🎮 Lab Simulasi</a>
+            <a href="guide.html" class="btn btn-ghost btn-sm">📘 Panduan</a>
+            <button class="btn btn-ghost btn-sm" onclick="openTeamCredits()">🛡️ Tim Satgas</button>
+            <button class="btn btn-ghost btn-sm" id="themeToggle" onclick="toggleTheme()">☀️ Light</button>
+        </div>
+    </nav>
+
+    <main class="container">
+        <div class="grid-2">
+            <div class="panel">
+                <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
+                    <span style="font-size: 0.76rem; font-weight: 700; color: var(--accent); text-transform: uppercase;">
+                        Local Static File Inspector
+                    </span>
+                    <span style="font-size: 0.76rem; color: var(--text-muted);">🔒 100% Diproses Aman di Perangkatmu</span>
+                </div>
+                <h1 style="font-size: 1.55rem; margin-top: 6px;">Periksa Keamanan File Sebelum Dibuka</h1>
+                <p style="color: var(--text-secondary); font-size: 0.9rem; margin-top: 6px;">
+                    Seret berkas apa pun dari perangkatmu untuk membedah struktur ekstensinya, membaca <em>Magic Bytes Header</em>, menghitung kode <strong>SHA-256</strong>, dan mengecek reputasinya ke <strong>VirusTotal</strong>.
+                </p>
+
+                <div class="dropzone" id="dropzone" onclick="document.getElementById('fileInput').click()">
+                    <input type="file" id="fileInput" style="display: none;" onchange="handleLiveFile(this.files[0])">
+                    <div style="font-size: 2rem; margin-bottom: 6px;">📄🔍</div>
+                    <strong style="display: block; font-size: 0.95rem;">Klik atau seret file ke sini untuk dianalisis</strong>
+                    <span style="font-size: 0.8rem; color: var(--text-muted);">Privasi terjaga: Isi file tidak pernah diunggah ke server mana pun</span>
+                </div>
+
+                <div id="liveScanResult" style="display: none; margin-top: 20px;">
+                    <div class="xray-box">
+                        <div class="xray-scanline"></div>
+                        <div style="font-size: 0.76rem; color: var(--text-muted); margin-bottom: 6px;">HASIL BEDAH STRUKTUR NAMA &amp; HEADER FILE:</div>
+                        <div id="liveXrayName" class="mono" style="font-size: 1.02rem; font-weight: 600; word-break: break-all;"></div>
+                        <div id="liveVerdict" style="margin-top: 10px; font-size: 0.88rem; line-height: 1.55;"></div>
+                    </div>
+
+                    <div style="background: var(--bg-subtle); padding: 16px; border-radius: 10px; border: 1px solid var(--border-color);">
+                        <div style="display: flex; justify-content: space-between; font-size: 0.82rem; color: var(--text-muted); flex-wrap: wrap; gap: 8px;">
+                            <span>Ukuran File: <strong id="liveSize" style="color: var(--text-primary);"></strong></span>
+                            <span>Tipe MIME: <strong id="liveMime" class="mono" style="color: var(--text-primary);"></strong></span>
+                        </div>
+                        <div style="margin-top: 10px; font-size: 0.8rem; color: var(--text-muted);">Sidik Jari Digital (SHA-256 Checksum):</div>
+                        <div id="liveHash" class="mono" style="font-size: 0.8rem; word-break: break-all; margin-top: 4px; color: var(--accent); font-weight: 600;">Menghitung SHA-256...</div>
+
+                        <div style="margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--border-color);">
+                            <label style="font-size: 0.78rem; color: var(--text-secondary); display: block; margin-bottom: 6px;">
+                                Punya kode SHA-256 resmi dari website tempatmu mengunduh? Tempel di sini untuk dicocokkan:
+                            </label>
+                            <input type="text" id="manualOfficialHash" oninput="checkManualHashMatch()" placeholder="Tempel (Paste) SHA-256 resmi di sini..." class="mono" style="width: 100%; padding: 8px 12px; border-radius: 6px; border: 1px solid var(--border-color); background: var(--bg-surface); color: var(--text-primary); font-size: 0.78rem;">
+                            <div id="manualHashVerdict" style="margin-top: 6px; font-size: 0.8rem;"></div>
+                        </div>
+
+                        <div style="margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+                            <span style="font-size: 0.78rem; color: var(--text-muted);">
+                                Ingin memastikan apakah isi file ini bersih menurut 70+ mesin Antivirus dunia?
+                            </span>
+                            <a id="vtLookupBtn" href="https://www.virustotal.com" target="_blank" rel="noopener noreferrer" class="btn btn-ghost btn-sm" style="border-color: var(--accent); color: var(--accent);">
+                                🛡️ Cek Hash Ini di VirusTotal &nearr;
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="margin-top: 24px; padding-top: 20px; border-top: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
+                    <div>
+                        <strong style="display: block; font-size: 0.95rem;">Asah Ketelitianmu di Lab Simulasi Interaktif!</strong>
+                        <span style="font-size: 0.84rem; color: var(--text-secondary);">Hadapi 3 kasus simulasi dunia nyata lengkap dengan alur cerita &amp; skor.</span>
+                    </div>
+                    <a href="play.html" class="btn btn-primary">
+                        Masuk ke Lab Simulasi &rarr;
+                    </a>
+                </div>
+            </div>
+
+            <!-- Kolom Kanan: Leaderboard Bersih (Klik 5x pada judul atau tekan Ctrl+Shift+L untuk akses Maintainer PIN: satgas) -->
+            <div class="panel">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                    <h2 id="secretAdminTrigger" style="font-size: 1.05rem; user-select: none; cursor: default;" title="Papan Peringkat Ketelitian">🏆 Papan Peringkat</h2>
+                    <span style="font-size: 0.74rem; color: var(--text-muted);">Identitas Disamarkan</span>
+                </div>
+                <p style="font-size: 0.82rem; color: var(--text-secondary); margin-bottom: 14px;">
+                    Daftar pengguna paling teliti di Lab Simulasi. Nama disensor otomatis demi privasi data.
+                </p>
+                <div style="display: flex; flex-direction: column; gap: 8px;" id="homeLeaderboardList"></div>
+            </div>
+        </div>
+    </main>
+
+    <div class="modal-backdrop" id="modalBackdrop">
+        <div class="modal-card" id="modalCard">
+            <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding-bottom: 12px; margin-bottom: 16px;">
+                <h3 id="modalTitle" style="font-size: 1.05rem;"></h3>
+                <button class="btn btn-ghost btn-sm" onclick="closeModal()">✕</button>
+            </div>
+            <div id="modalContent"></div>
+        </div>
+    </div>
+
+    <footer class="site-footer">
+        Dikembangkan oleh <strong>Tim Satgas Salah Download - Polibatam</strong> &bull; 
+        <a href="javascript:void(0)" onclick="openTeamCredits()" style="color: var(--accent); text-decoration: none; font-weight: 600;">Lihat Profil Tim Pengembang</a>
+    </footer>
+
+    <script src="../tampilan/js/scenario_data.js"></script>
+    <script src="../tampilan/js/main.js"></script>
+</body>
+</html>

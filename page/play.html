@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="id" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lab Simulasi — FileMate</title>
+    <link rel="stylesheet" href="../tampilan/css/style.css">
+</head>
+<body>
+
+    <nav class="navbar">
+        <a href="index.html" class="filemate-logo">
+            <svg width="42" height="42" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                <path class="logo-ShieldPath" d="M50 8 L86 22 V48 C86 71 70 86 50 94 C30 86 14 71 14 48 V22 L50 8 Z" stroke-width="6" stroke-linejoin="round"/>
+                <path class="logo-FolderTab" d="M28 33 C28 30.5 30 28.5 32.5 28.5 H46 C48 28.5 49.5 30 50.5 32 L52 35 H28 V33 Z"/>
+                <rect class="logo-FolderBody" x="28" y="34" width="44" height="34" rx="8"/>
+                <circle class="logo-Eye" cx="41" cy="49" r="4"/>
+                <circle class="logo-Eye" cx="59" cy="49" r="4"/>
+                <path class="logo-Mouth" d="M43 57 Q50 63 57 57" stroke-width="3.5" stroke-linecap="round"/>
+            </svg>
+            <div class="logo-text-wrap">
+                <div class="logo-title"><span class="part-file">File</span><span class="part-mate">Mate</span></div>
+                <div class="logo-subtitle">SAFE DOWNLOAD ADVISOR</div>
+            </div>
+        </a>
+        <div class="nav-actions">
+            <a href="index.html" class="btn btn-ghost btn-sm">🔍 Scanner Beranda</a>
+            <a href="guide.html" class="btn btn-ghost btn-sm">📘 Panduan</a>
+            <button class="btn btn-ghost btn-sm" onclick="openTeamCredits()">🛡️ Tim Satgas</button>
+            <button class="btn btn-ghost btn-sm" id="themeToggle" onclick="toggleTheme()">☀️ Light</button>
+        </div>
+    </nav>
+
+    <main class="container">
+        
+        <div class="panel" style="padding: 14px 20px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
+            <div style="display: flex; gap: 24px; align-items: center;">
+                <div>
+                    <span style="font-size: 0.72rem; color: var(--text-muted); display: block;">TAHAP SIMULASI</span>
+                    <strong id="stageIndicator" style="color: var(--accent);">Kasus 1 dari 3</strong>
+                </div>
+                <div>
+                    <span style="font-size: 0.72rem; color: var(--text-muted); display: block;">SKOR KETELITIAN</span>
+                    <strong id="scoreIndicator" class="mono">100 Pts</strong>
+                </div>
+                <div>
+                    <span style="font-size: 0.72rem; color: var(--text-muted); display: block;">WAKTU</span>
+                    <strong id="timerIndicator" class="mono">00:00</strong>
+                </div>
+            </div>
+            <div>
+                <button class="btn btn-ghost btn-sm" onclick="showHint()">
+                    💡 Butuh Petunjuk Analis? (-5 Pts)
+                </button>
+            </div>
+        </div>
+
+        <div class="panel" id="sandboxPanel">
+            <h2 id="caseTitle" style="font-size: 1.35rem;"></h2>
+            <p id="caseStory" style="color: var(--text-secondary); font-size: 0.92rem; margin-top: 6px;"></p>
+
+            <div id="officialHashBox" style="display: none; margin-top: 14px; padding: 12px 16px; background: var(--bg-subtle); border-left: 3px solid var(--accent); border-radius: 6px;">
+                <span style="font-size: 0.8rem; color: var(--text-muted);">📌 Checksum SHA-256 Resmi dari Website Developer:</span>
+                <div id="officialHashValue" class="mono" style="font-size: 0.84rem; margin-top: 4px; word-break: break-all; font-weight: 600;"></div>
+            </div>
+
+            <div class="explorer-frame">
+                <div class="explorer-header">
+                    <span class="mono" id="folderPath"></span>
+                    <span>Periksa dengan <strong>X-Ray / SHA-256</strong> lalu pilih <strong>Buka File</strong> atau <strong>Hapus File</strong></span>
+                </div>
+                <div id="fileRowsContainer"></div>
+            </div>
+
+            <div class="feedback-drawer" id="feedbackDrawer"></div>
+
+            <div style="margin-top: 20px; display: flex; justify-content: space-between; align-items: center;">
+                <span id="progressStatus" style="font-size: 0.85rem; color: var(--text-muted);"></span>
+                <button class="btn btn-primary" id="btnNextStage" onclick="nextScenario()">
+                    Lanjut ke Kasus Berikutnya &rarr;
+                </button>
+            </div>
+        </div>
+
+    </main>
+
+    <div class="modal-backdrop" id="modalBackdrop">
+        <div class="modal-card" id="modalCard">
+            <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding-bottom: 12px; margin-bottom: 16px;">
+                <h3 id="modalTitle" style="font-size: 1.05rem;"></h3>
+                <button class="btn btn-ghost btn-sm" onclick="closeModal()">✕</button>
+            </div>
+            <div id="modalContent"></div>
+        </div>
+    </div>
+
+    <footer class="site-footer">
+        Dikembangkan oleh <strong>Tim Satgas Salah Download - Polibatam</strong> &bull; 
+        <a href="javascript:void(0)" onclick="openTeamCredits()" style="color: var(--accent); text-decoration: none; font-weight: 600;">Lihat Profil Tim Pengembang</a>
+    </footer>
+
+    <script src="../tampilan/js/scenario_data.js"></script>
+    <script src="../tampilan/js/main.js"></script>
+</body>
+</html>

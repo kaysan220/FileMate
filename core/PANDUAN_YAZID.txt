@@ -1,0 +1,40 @@
+=====================================================================
+PANDUAN TUGAS MUHAMAD YAZID FIRDAUS (LINUX & INFRASTRUCTURE SPECIALIST)
+=====================================================================
+
+1. FILE YANG WAJIB KAMU KUASAI:
+   - `core/linux_utils.py` (Pemanggil perintah asli Linux `sha256sum`, `file --mime-type`, `ls -l`)
+   - Folder `data/dummy_files/`, `data/hasil.csv`, dan `data/feedback_user.csv`
+
+2. PERINTAH TERMINAL LINUX YANG WAJIB DIJALANKAN DI SERVER LINUX / UBUNTU:
+   Buka terminal Linux di dalam folder proyek FileMate, lalu jalankan perintah ini:
+
+   a) Mengatur Permission File Dummy (Simulasi Malware diberi izin eksekusi `x`, File Aman hanya baca):
+      chmod 644 data/dummy_files/*
+      chmod +x data/dummy_files/*.exe data/dummy_files/*.vbs data/dummy_files/*.bat data/dummy_files/*.sh data/dummy_files/Denah_Ruangan_Kantor.jpg data/dummy_files/Poster_Kegiatan_Kampus.jpg
+
+   b) Mengunci Keamanan File Log CSV (Hanya pemilik server yang bisa baca/tulis - Least Privilege):
+      chmod 600 data/hasil.csv data/feedback_user.csv
+
+   c) Perintah Pamer ke Dosen Saat Demo Linux CLI:
+      ls -l data/dummy_files/
+      file --mime-type data/dummy_files/Kontrak_Magang_2026.pdf
+      sha256sum data/dummy_files/Patch_Update_v2.zip
+      cat data/hasil.csv
+      cat data/feedback_user.csv
+
+3. KEAMANAN KODE DI `core/linux_utils.py` (POIN PLUS DKS & LINUX):
+   - Menggunakan `os.path.basename()` agar user tidak bisa melakukan serangan Path Traversal (`../../etc/passwd`).
+   - Menggunakan `subprocess.run([..], shell=False)` agar kebal dari serangan Command Injection (`; rm -rf /`).
+
+4. CONTOH KONFIGURASI REVERSE PROXY NGINX (`/etc/nginx/sites-available/filemate`):
+   server {
+       listen 80;
+       server_name localhost;
+       server_tokens off;
+       location / {
+           proxy_pass http://127.0.0.1:5000;
+           proxy_set_header Host $host;
+           proxy_set_header X-Real-IP $remote_addr;
+       }
+   }

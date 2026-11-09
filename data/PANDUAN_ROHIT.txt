@@ -1,0 +1,17 @@
+=====================================================================
+PANDUAN TUGAS ROHIT AL BUKHORI (SCENARIO & DATA HANDLING DEVELOPER)
+=====================================================================
+
+1. FILE YANG WAJIB KAMU KUASAI:
+   - `data/skenario.json` (Bank soal 3 kategori: SPOOFING, HASH, FATIGUE)
+   - `data/buat_dummy.py` (Skrip pembuat 18 file fisik dummy di `data/dummy_files/`)
+   - Fungsi `baca_skenario()` di dalam `core/algorithms.py`
+
+2. CARA MENJALANKAN PEMBUAT FILE DUMMY:
+   Sebenarnya 18 file fisik dummy sudah otomatis dibuatkan di dalam folder `data/dummy_files/`.
+   Namun jika kamu mengubah nama file di `skenario.json`, cukup buka terminal dan jalankan:
+       python data/buat_dummy.py
+
+3. CONTEKAN SAAT DITANYA DOSEN PENGUJI:
+   - "Bagaimana cara program mengacak soal?"
+     Jawab: Fungsi `baca_skenario()` membaca `data/skenario.json`, mengambil 1 skenario acak per kategori menggunakan `random.choice()`, lalu mengacak urutan kemunculan kasus dan urutan baris file menggunakan `random.shuffle()`.
